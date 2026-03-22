@@ -1,16 +1,20 @@
-name: Build OTBR Add-on
+name: Build and Push OTBR
 
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
-  build-aarch64:
+  build:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up QEMU
@@ -19,20 +23,18 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build aarch64 image
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push aarch64
         uses: docker/build-push-action@v6
         with:
           context: ./openthread_border_router
           platforms: linux/arm64
-          push: false
-          outputs: type=docker,dest=/tmp/otbr-fixed-aarch64.tar
-          build-args: |
-            BUILD_ARCH=aarch64
-          tags: local/otbr-fixed:aarch64
-
-      - name: Upload image artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: otbr-fixed-aarch64
-          path: /tmp/otbr-fixed-aarch64.tar
-          retention-days: 7
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/otbr-fixed:aarch64
+          build-args: BUILD_ARCH=aarch64
