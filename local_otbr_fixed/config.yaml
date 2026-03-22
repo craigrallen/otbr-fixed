@@ -4,7 +4,10 @@ slug: local_otbr_fixed
 description: "OTBR with migration script crash fix"
 arch:
   - aarch64
-image: "ghcr.io/craigrallen/otbr-fixed:{arch}"
+  - amd64
+build_from:
+  aarch64: ghcr.io/home-assistant/aarch64-base-debian:trixie
+  amd64: ghcr.io/home-assistant/amd64-base-debian:trixie
 homeassistant: 2025.7.0
 gpio: true
 hassio_api: true
