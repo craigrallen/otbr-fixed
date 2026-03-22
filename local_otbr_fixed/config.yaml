@@ -1,12 +1,10 @@
----
-version: 2.16.5-fixed
-slug: openthread_border_router_fixed
-name: OpenThread Border Router (Fixed)
-description: OpenThread Border Router with migration script crash fix
-url: https://github.com/craigrallen/otbr-fixed
+name: "OTBR Fixed"
+version: "2.16.5-fixed"
+slug: local_otbr_fixed
+description: "OTBR with migration script crash fix"
 arch:
   - aarch64
-  - amd64
+image: "ghcr.io/craigrallen/otbr-fixed:{arch}"
 homeassistant: 2025.7.0
 gpio: true
 hassio_api: true
@@ -20,7 +18,6 @@ privileged:
   - NET_ADMIN
 devices:
   - /dev/net/tun
-image: ghcr.io/craigrallen/otbr-fixed-{arch}
 init: false
 options:
   device: null
